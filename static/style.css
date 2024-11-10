@@ -1,0 +1,25 @@
+body {
+    background-color: #010e18;
+}
+.container {
+    background-color: #00070c;
+}
+.infoBox {
+    background-color: #011c31;
+    border-color: #011c31;
+}
+.text {
+    color: #FFFFFF;
+}
+.progress-bar {
+    width: 0%;
+}
+#overallProgressBar,
+#fileProgressBar {
+    transition: width 0.2s ease-in-out;
+}
+:disabled {
+    cursor: not-allowed;
+    background-color: #6b7280;
+    color: #9ca3af;
+}

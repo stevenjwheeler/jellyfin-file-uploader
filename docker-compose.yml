@@ -1,18 +1,21 @@
 version: '3.8'
 services:
   pyload:
-    # image: pyload2:2
     build: .
     container_name: pyload-2
     ports:
       - "5005:5005"
     volumes:
-      - ./downloads:/app/downloads
+      - /home/steven/jellyfin/media:/app/downloads
+    restart: unless-stopped
     environment:
       FLASK_APP: app.py
       FLASK_RUN_HOST: 0.0.0.0
-    restart: unless-stopped
-
-# and i want the upoad to be fast when other lan devices are trying to upload
-# i want to see the uploaded fiels 
-# auth system
+      FLASK_SECRET_KEY: Rhkp0WpnQHNCvmemzk3E0aBrhExHwAi
+      ALLOWED_EXTENSIONS: mp4,m4v,mov,mkv,avi,wmv,flv,webm,mp3,aac,flac,wav,ogg,m4a,mka,mks,jpg,jpeg,png,gif,bmp,tiff,webp
+      LOGGING_LEVEL: info
+      DOWNLOADS_PATH: ./downloads
+      TEMP_CHUNKS_PATH: ./temp_chunks
+      MAX_CONTENT_LENGTH: 20
+      MAX_FILE_SIZE: 5
+    command: gunicorn --bind 0.0.0.0:5005 app:app
