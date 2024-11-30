@@ -2,7 +2,7 @@ version: '3.8'
 services:
   pyload:
     build: .
-    container_name: oasislab-file-uploader
+    container_name: jellyfin-file-uploader
     ports:
       - "5005:5005"
     volumes:
