@@ -1,3 +1,15 @@
+# Oasislab File Uploader
+# Author: Steven Wheeler
+# https://github.com/stevenjwheeler
+# Based on the work of Osama Yusuf (https://github.com/Osama-Yusuf)
+# 
+# This is an easy-to-use and self-hosted jellyfin media uploader straight to your jellyfin volume folders.
+# Upload media using your browser locally or from other devices on your network, or expose it and upload media from anywhere in the world*!
+# (*Make sure that the login is enabled and connected to your jellyfin if you want to expose it publically! Not recommended unless you know what you're doing).
+# 
+# This uploader supports chunk-based file uploads, logging, XSS protection, directory traversal protection and CSRF protection, cleans up after itself, 
+# and all with a simple, easy-to-use and self-hosted interface.
+
 import logging
 import random
 import string
@@ -5,6 +17,7 @@ import threading
 from flask import Flask, g
 from flask_wtf.csrf import CSRFProtect
 
+# Import components
 from components.configuration import FLASK_SECRET_KEY, VERSION
 from components.routes import home, upload_chunk
 from components.stale_cleanup import periodic_cleanup
