@@ -20,7 +20,7 @@
     <div id="toastContainer"></div>
     <div class="container max-w-md mx-auto">
         <div class="p-8 rounded-lg shadow-lg container">
-            <h2 class="mb-4 text-xl font-bold text-center text">Upload</h2>
+            <h2 class="mb-4 text-xl font-bold text-center text">Upload to Jellyfin</h2>
             <form id="uploadForm" class="space-y-4" enctype="multipart/form-data" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div>
@@ -62,7 +62,9 @@
                     <br>
                     Maximum individual file size: {{FILE_MAX | default(5)}} GB<br>
                     Maximum total upload size: {{CONTENT_MAX | default(20)}} GB<br>
-                    OasisLab File Uploader v{{VERSION}}
+                    <a href="https://github.com/stevenjwheeler/jellyfin-file-uploader" target="_blank" class="text-blue-500 hover:underline">
+                        Jellyfin File Uploader
+                    </a> v{{VERSION}}
                 </div>
             </form>
         </div>
