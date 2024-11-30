@@ -1,6 +1,7 @@
-# OasisLab File Uploader
+# Jellyfin File Uploader
 An advanced, self-hosted file uploader to your jellyfin volume.
 Upload media using your browser locally or from other devices on your network, or expose it and upload media from anywhere in the world*!
+
 (*Make sure that the login is enabled and connected to your jellyfin if you want to expose it publically! Not recommended unless you know what you're doing).
 
 ## ⭐ Features
@@ -29,21 +30,21 @@ Requirements:
         cd <ADD DIRECTORY>
         docker-compose up -d --build
     ```
-OasisLab File Uploader is now running on http://localhost:5005
+Jellyfin File Uploader is now running on http://localhost:5005
 
 ### Direct
 Requirements:
-- Python
+- Python3
 
 #### Instructions
--To run using your host python:
+- To run using your host python:
     ```bash
         git clone <ADD URL>
         cd <ADD DIRECTORY>
         RUN pip3 install --no-cache-dir -r requirements.txt
         python3 app.py 
     ```
-OasisLab File Uploader is now running on http://localhost:5005
+Jellyfin File Uploader is now running on http://localhost:5005
 
 ## 🧑 Attribution
 Based on the work of Osama Yusuf (https://github.com/Osama-Yusuf, https://github.com/Osama-Yusuf/jellyfin-uploader)
