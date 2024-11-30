@@ -1,7 +1,9 @@
-# Oasislab File Uploader
+# Jellyfin File Uploader
 # Author: Steven Wheeler
 # https://github.com/stevenjwheeler
 # Based on the work of Osama Yusuf (https://github.com/Osama-Yusuf)
+#
+# Source Code available at: https://github.com/stevenjwheeler/jellyfin-file-uploader
 # 
 # This is an easy-to-use and self-hosted jellyfin media uploader straight to your jellyfin volume folders.
 # Upload media using your browser locally or from other devices on your network, or expose it and upload media from anywhere in the world*!
