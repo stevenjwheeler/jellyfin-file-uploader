@@ -1,75 +1,6 @@
-MAX_FILE_SIZE = MAX_FILE_SIZE * 1024 * 1024 * 1024; // Convert MB to bytes
-MAX_TOTAL_SIZE = MAX_TOTAL_SIZE * 1024 * 1024 * 1024; // Convert MB to bytes
 const CHUNK_SIZE = 32 * 1024 * 1024; // 32MB per chunk
-
-// Track upload bytes for progress bars
-let totalBytesUploaded = 0;
-let totalUploadSize = 0;
-
-document.addEventListener('DOMContentLoaded', async function () {
-    /**
-     * Called when the form is submitted. Prevents the default form submission
-     * and instead uploads the files in chunks to the server.
-     * @param {Event} event The form submission event
-     */
-    document.getElementById('uploadForm').onsubmit = async function (event) {
-        event.preventDefault();
-        console.log('Form submitted');
-        const files = document.getElementById('fileInput').files;
-        const directory = document.getElementById('directorySelect').value;
-
-        // Disable the submit button
-        document.getElementById('uploadButton').disabled = true;
-
-        // Reset the overall progress bar once before starting any uploads
-        document.getElementById('overallProgressBar').style.width = '0%';
-        totalBytesUploaded = 0;
-        totalUploadSize = 0;
-
-        // Determine if a file is too large
-        for (let file of files) {
-            console.log(`Checking file ${file.name} size: ${file.size}`);
-            totalUploadSize += file.size;
-            if (file.size > MAX_FILE_SIZE) {
-                console.log(`File ${file.name} exceeds the maximum allowed.`);
-                resetForm(`File ${file.name} exceeds the maximum allowed.`);
-                return;
-            }
-        }
-        // Determine if the total upload size is too large
-        console.log(`Total upload size: ${totalUploadSize}`);
-        if (totalUploadSize > MAX_TOTAL_SIZE) {
-            console.log('Total upload size exceeds the maximum allowed.');
-            resetForm('Total upload size exceeds the maximum allowed.');
-            return;
-        }
-
-        // Process each file
-        for (let file of files) {
-            console.log(`Processing file ${file.name}`);
-            document.getElementById('fileProgressBar').style.width = '0%'; // Reset progress bar
-            await uploadFileInChunks(file, directory, totalUploadSize);
-        }
-
-        // Clear the form and display a success message
-        console.log('All files uploaded successfully');
-        resetForm('All files uploaded successfully');
-        return;
-    };
-});
-
-/**
- * Computes the SHA-256 checksum of a file using the Web Crypto API.
- * @param {File} file The file to compute the checksum for
- * @returns {Promise<string>} The computed checksum as a hex string
- */
-async function computeChecksum(file) {
-    const arrayBuffer = await file.arrayBuffer(); // Read file as an ArrayBuffer
-    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer); // Compute SHA-256 hash
-    return Array.from(new Uint8Array(hashBuffer)) // Convert ArrayBuffer to byte array
-        .map(b => b.toString(16).padStart(2, '0')) // Convert bytes to hex
-        .join(''); // Join all hex bytes into a single string
-}
+import { totalBytesUploaded, updateTotalBytesUploaded, updateUploadedFilesCount, updateSkippedFilesCount } from '../main.js';
+import { showToast } from './toast-display.js';
 
 /**
  * Uploads a file to the server in chunks, to avoid issues with large file sizes.
@@ -77,7 +8,7 @@ async function computeChecksum(file) {
  * @param {string} directory The directory to upload the file to
  * @param {number} totalBytesToUpload The total number of bytes to upload across all files
  */
-async function uploadFileInChunks(file, directory, totalBytesToUpload) {
+export async function uploadFileInChunks(file, directory, totalBytesToUpload) {
     const checksum = await computeChecksum(file);
     console.log(`Checksum for file ${file.name}: ${checksum}`);
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE); // Calculate the total number of chunks needed to send this file
@@ -89,7 +20,7 @@ async function uploadFileInChunks(file, directory, totalBytesToUpload) {
      * Uploads the next chunk of a file to the server.
      * @private
      */
-    function uploadNextChunk() {
+    async function uploadNextChunk() {
         return new Promise((resolve, reject) => {
             console.log(`Uploading chunk ${currentChunk + 1} of ${totalChunks} for file ${file.name}`);
             const start = currentChunk * CHUNK_SIZE;
@@ -159,44 +90,68 @@ async function uploadFileInChunks(file, directory, totalBytesToUpload) {
                         resolve(uploadNextChunk());
                     } else {
                         // File completely uploaded, update totalBytesUploaded
-                        totalBytesUploaded += file.size;
+                        updateTotalBytesUploaded(file.size);
                         console.log(`All chunks uploaded for file ${file.name}. Total bytes uploaded: ${totalBytesUploaded}`);
+                        updateUploadedFilesCount();
                         resolve();
                     }
                 } else { // Upload failed
-                    console.log(`Upload failed for file ${file.name}`);
-                    resetForm(xhr.responseText);
-                    reject(new Error(xhr.responseText));
+                    let errorMessage = xhr.responseText; // Get the raw error response
+                    try {
+                        // Try to parse the response and extract the error message
+                        const responseObject = JSON.parse(xhr.responseText);
+                        if (responseObject && responseObject.error) {
+                            errorMessage = responseObject.error; // Extract the error message
+                        }
+                    } catch (e) {
+                        // If parsing fails, log an error and use the raw response text
+                        console.error('Error parsing response:', e);
+                        reject(new Error("An error occurred during the upload."));
+                    }
+                reject(new Error(errorMessage));
                 }
             };
 
-            xhr.onerror = function () {
-                console.log(`Upload error for file ${file.name}`);
-                resetForm(xhr.responseText);
-                reject(new Error('Network error during upload.'));
+            xhr.onerror = function () { // Network error
+                let errorMessage = 'Network error during upload.';
+                try {
+                    // If responseText is available (it may not be on network errors)
+                    if (xhr.responseText) {
+                        const responseObject = JSON.parse(xhr.responseText);
+                        if (responseObject && responseObject.error) {
+                            errorMessage = responseObject.error; // Extract the error message
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                }
+                reject(new Error(errorMessage));
             };
 
             // Send the file chunk
             xhr.send(formData);
         });
     }
-    await uploadNextChunk();
+
+    try {
+        await uploadNextChunk();
+    } catch (error) {
+        // If an error occurs, log it and skip the current file, but continue with the others
+        console.log(`Error during upload of ${file.name}\n${error}\nSkipping this file.`);
+        showToast(`Failed to upload ${file.name}<br>${error}<br>Skipping this file.`, 'error');
+        updateSkippedFilesCount();
+    }
 }
 
 /**
- * Resets the file input to blank values, and
- * displays the given message to the user.
- * @param {string} message The message to display to the user
+ * Computes the SHA-256 checksum of a file using the Web Crypto API.
+ * @param {File} file The file to compute the checksum for
+ * @returns {Promise<string>} The computed checksum as a hex string
  */
-function resetForm(message) {
-    // Check if message is empty or undefined and replace it with default if so
-    message = message || 'An error occurred, please try again';
-    // Clear the form and display the message
-    console.log('Clearing form');
-    document.getElementById('fileInput').value = '';
-    document.getElementById('fileProgressBar').style.width = '0%';
-    document.getElementById('overallProgressBar').style.width = '0%';
-    document.getElementById('progressText').innerText = 'Waiting for upload to start...';
-    alert(message);
-    document.getElementById('uploadButton').disabled = false;
+async function computeChecksum(file) {
+    const arrayBuffer = await file.arrayBuffer(); // Read file as an ArrayBuffer
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer); // Compute SHA-256 hash
+    return Array.from(new Uint8Array(hashBuffer)) // Convert ArrayBuffer to byte array
+        .map(b => b.toString(16).padStart(2, '0')) // Convert bytes to hex
+        .join(''); // Join all hex bytes into a single string
 }
