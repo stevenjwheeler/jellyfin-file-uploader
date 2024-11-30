@@ -1,25 +1,97 @@
-body {
-    background-color: #010e18;
-}
-.container {
-    background-color: #00070c;
-}
-.infoBox {
-    background-color: #011c31;
-    border-color: #011c31;
-}
-.text {
-    color: #FFFFFF;
-}
-.progress-bar {
-    width: 0%;
-}
-#overallProgressBar,
-#fileProgressBar {
-    transition: width 0.2s ease-in-out;
-}
-:disabled {
-    cursor: not-allowed;
-    background-color: #6b7280;
-    color: #9ca3af;
-}
+/* /// CORE STYLING /// */
+    /* Background style */
+    body {
+        background-color: #010e18;
+    }
+    /* Text style */
+    .text {
+        color: #FFFFFF;
+    }
+    /* Inner containers style */
+    .container {
+        background-color: #00070c;
+    }
+    .infoBox {
+        background-color: #011c31;
+        border-color: #011c31;
+    }
+
+/* /// PROGRESS BAR STYLING /// */
+    /* Progress bar style */
+    .progress-bar {
+        width: 0%;
+    }
+    /* Progress bar animation/smoothing */
+    #overallProgressBar,
+    #fileProgressBar {
+        transition: width 0.1s ease-in-out;
+    }
+
+/* /// BUTTON STYLING /// */
+    /* Button disabled style */
+    :disabled {
+        cursor: not-allowed;
+        background-color: #6b7280;
+        color: #9ca3af;
+    }
+
+/* /// TOAST STYLING /// */
+    /* Toast container style */
+    #toastContainer {
+        position: fixed;
+        bottom: 20px; /* Position the container 20px from the bottom */
+        left: 50%; /* Position the container at the center horizontally */
+        transform: translateX(-50%); /* Offset the container to truly center it */
+        z-index: 9999; /* Ensure toasts are above other content */
+        width: auto; /* Allow the container to adjust to the width of the toasts */
+        max-width: 90%; /* Limit the container's maximum width, so toasts don't stretch too much */
+        padding: 10px; /* Space around toasts */
+        box-sizing: border-box; /* Make padding included in the width calculation */
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Space between each toast */
+    }
+
+    /* Toast message style */
+    .toast {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.3s ease; /* Add transform for smooth entry/exit */
+        position: relative; /* Position the close button inside the toast */
+        width: auto; /* Make the toast width adapt to the content */
+        max-width: 100%; /* Ensure toast width doesn’t exceed the container’s max width */
+        box-sizing: border-box; /* Ensure padding is included in width calculation */
+    }
+
+    /* Close button inside toast style */
+    .toast .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* Toast show effect */
+    .toast.show {
+        opacity: 1;
+    }
+
+    /* Toast success and error styles */
+    .toast.success {
+        background-color: #4CAF50;
+    }
+    .toast.error {
+        background-color: #F44336;
+    }
+
+    /* Toast close button hover effect */
+    .close-btn:hover {
+        color: #ff0000;
+    }
