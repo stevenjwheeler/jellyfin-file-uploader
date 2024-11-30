@@ -11,10 +11,13 @@
         var MAX_FILE_SIZE = {{ FILE_MAX | default(5)}};
         var MAX_TOTAL_SIZE = {{ CONTENT_MAX | default(20)}};
     </script>
-    <script src="{{ url_for('static', filename='upload.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='javascript-components/uploader.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='javascript-components/toast-display.js') }}"></script>
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
 <body class="flex items-center justify-center h-screen">
+    <div id="toastContainer"></div>
     <div class="container max-w-md mx-auto">
         <div class="p-8 rounded-lg shadow-lg container">
             <h2 class="mb-4 text-xl font-bold text-center text">Upload</h2>
