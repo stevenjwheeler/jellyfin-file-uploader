@@ -1,3 +1,6 @@
 .env
 OLD/*
 app.log
+components/__pycache__
+downloads
+temp_chunks
