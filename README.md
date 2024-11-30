@@ -24,27 +24,27 @@ Requirements:
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
 #### Instructions
-- To run the jellyfin uploader on top of docker just clone the repo and deploy it with docker-compose as follows:
+- Run the following commands in a terminal:
     ```bash
         git clone https://github.com/stevenjwheeler/jellyfin-file-uploader.git
         cd jellyfin-file-uploader
         docker-compose up -d --build
     ```
-Jellyfin File Uploader is now running on http://localhost:5005
+- Jellyfin File Uploader is now running on http://localhost:5005
 
 ### Direct
 Requirements:
 - Python3
 
 #### Instructions
-- To run using your host python:
+- Run the following commands in a terminal:
     ```bash
         git clone https://github.com/stevenjwheeler/jellyfin-file-uploader.git
         cd jellyfin-file-uploader
         RUN pip3 install --no-cache-dir -r requirements.txt
         python3 app.py 
     ```
-Jellyfin File Uploader is now running on http://localhost:5005
+- Jellyfin File Uploader is now running on http://localhost:5005
 
 ## 🧑 Attribution
 Based on the work of Osama Yusuf (https://github.com/Osama-Yusuf, https://github.com/Osama-Yusuf/jellyfin-uploader)
