@@ -12,4 +12,71 @@ services:
     environment:
       FLASK_APP: app.py
       FLASK_RUN_HOST: 0.0.0.0
+
+      ## /// Required variables: ///
+
+      ## Flask Secret Key
+      ## A key used to secure user sessions and tokens.
+      ## This can be a random phrase as long as it doesnt contain symbols or spaces.
+      ## A mix of uppercase and lowercase letters and numbers are recommended, as well as a length of at least 16 characters, 32 recommended.
+      ## This variable does not have a default, so leaving it blank will cause the application to refuse to start.
+      FLASK_SECRET_KEY: 
+      
+      ## Allowed Extensions
+      ## Extensions allowed to be uploaded on the portal by the end user.
+      ## This should be separated with commas and no spaces (i.e: mp4,png,jpg etc).
+      ## This variable does not have a default, so leaving it blank will cause the application to refuse to start.
+      ALLOWED_EXTENSIONS: mp4,m4v,mov,mkv,avi,wmv,flv,webm,mp3,aac,flac,wav,ogg,m4a,mka,mks,jpg,jpeg,png,gif,bmp,tiff,webp
+      
+      ## Login Enabled
+      ## Defines whether the login system is on or off.
+      ## It is HIGHLY recommended to keep the login system on, otherwise anyone can upload files to your server.
+      ## Default: true
+      LOGIN_ENABLED: true
+
+      ## Jellyfin Server Address
+      ## The address of your jellyfin server instance with which to check logins against.
+      ## This should be a http or https address to your jellyfin server.
+      ## Default: http://localhost:8096
+      JELLYFIN_SERVER_ADDRESS: http://localhost:8096
+
+      ## /// Optional variables: ///
+      ## /// Uncomment the line with a single hash to enable a variable ///
+
+      ## Logging Level
+      ## Determines the level of logging in the servers console and the app.log file.
+      ## Can be debug, info, warning, error, or critical.
+      ## Default: info
+      #LOGGING_LEVEL: info
+
+      ## Downloads Path
+      ## The path to the file structure where to store uploaded content. 
+      ## The folders inside this folder will be served as options for the end user to upload their files to.
+      ## Can be either relative or absolute.
+      ## Default: ./downloads
+      DOWNLOADS_PATH: ./downloads
+
+      ## Temp Chunks Path
+      ## The path to temporarily store uploaded chunks until recombination, verification and movement to the selected folder in DOWNLOADS_PATH.
+      ## Can be either relative or absolute.
+      ## Default: ./temp_chunks
+      TEMP_CHUNKS_PATH: ./temp_chunks
+
+      ## Max File Size
+      ## The maximum file size allowed for each individual file, measured in gigabytes.
+      ## Default: 5 (gigabytes)
+      MAX_FILE_SIZE: 5
+
+      ## Max Content Length
+      ## The maximum file size allowed total across all files in a single upload, measured in gigabytes.
+      ## Default: 20 (gigabytes)
+      MAX_CONTENT_LENGTH: 20
+
+      ## Stale Files Threshold
+      ## The time for any stale files (left for this amount of time in TEMP_CHUNKS_PATH after upload) to be cleared, measured in seconds.
+      ## The system will automatically check the TEMP_CHUNKS_PATH every hour for files that have existed for longer than this amount.
+      ## These files are usually left over after some form of error has occured, as the program generally cleans them up as soon as no longer needed.
+      ## Default: 86400 (24 hours)
+      STALE_FILE_THRESHOLD: 86400
+
     command: gunicorn --bind 0.0.0.0:5005 app:app
