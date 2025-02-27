@@ -20,19 +20,18 @@ from flask import Flask, g
 from flask_wtf.csrf import CSRFProtect
 
 # Import components
-from components.configuration import FLASK_SECRET_KEY, VERSION
-from components.routes import home, upload_chunk
+from components.configuration import VERSION, FLASK_SECRET_KEY
+from components.routes import routes
 from components.stale_cleanup import periodic_cleanup
 
 # Initialise the app
 app = Flask(__name__)
+app.config.from_object('components.configuration')
 app.config['SECRET_KEY'] = FLASK_SECRET_KEY
 app.config['PROPAGATE_EXCEPTIONS'] = False
 csrf = CSRFProtect(app)
 
-# Register routes from components/routes.py
-app.add_url_rule('/', 'home', home)
-app.add_url_rule('/upload_chunk', 'upload_chunk', upload_chunk, methods=['POST'])
+app.register_blueprint(routes)
 
 # Generate nonce for CSRF protection
 def generate_nonce(length=16): 
