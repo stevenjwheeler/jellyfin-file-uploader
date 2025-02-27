@@ -35,6 +35,32 @@
         color: #9ca3af;
     }
 
+    /* Logout button style */
+    .logout-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        background-color: #f56565;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+        background-color: #c53030;
+    }
+
+    .logout-button:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.5);
+    }
+
+
 /* /// TOAST STYLING /// */
     /* Toast container style */
     #toastContainer {
