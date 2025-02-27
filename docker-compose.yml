@@ -6,7 +6,8 @@ services:
     ports:
       - "5005:5005"
     volumes:
-      - /home/steven/jellyfin/media:/app/downloads
+      # Point towards the folder structure where you want to store the downloaded files (likely your Jellyfin library)
+      - /downloads:/app/downloads
     restart: unless-stopped
     environment:
       FLASK_APP: app.py
