@@ -18,7 +18,7 @@ Upload media using your browser locally or from other devices on your network, o
 
 ## 🔧 How to Install
 
-### Docker (Recommended)
+### Docker Compose (Recommended)
 Requirements:
 - [Docker](https://docs.docker.com/engine/install/) 
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -31,6 +31,13 @@ Requirements:
         docker-compose up -d --build
     ```
 - Jellyfin File Uploader is now running on http://localhost:5005
+
+### Docker Container
+Requirements:
+- [Docker](https://docs.docker.com/engine/install/)
+
+#### Instructions
+
 
 ### Direct
 Requirements:
