@@ -28,6 +28,7 @@ Requirements:
     ```bash
         git clone https://github.com/stevenjwheeler/jellyfin-file-uploader.git
         cd jellyfin-file-uploader
+        nano docker-compose.yml (then adjust as needed)
         docker-compose up -d --build
     ```
 - Jellyfin File Uploader is now running on http://localhost:5005
@@ -37,7 +38,7 @@ Requirements:
 - [Docker](https://docs.docker.com/engine/install/)
 
 #### Instructions
-
+    Instructions coming soon
 
 ### Direct
 Requirements:
