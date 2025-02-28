@@ -6,7 +6,7 @@ services:
     ports:
       - "5005:5005"
     volumes:
-      # Point towards the folder structure where you want to store the downloaded files (likely your Jellyfin library)
+      ## Set to the path of your Jellyfin library structure
       - /downloads:/app/downloads
     restart: unless-stopped
     environment:
@@ -48,19 +48,6 @@ services:
       ## Can be debug, info, warning, error, or critical.
       ## Default: info
       #LOGGING_LEVEL: info
-
-      ## Downloads Path
-      ## The path to the file structure where to store uploaded content. 
-      ## The folders inside this folder will be served as options for the end user to upload their files to.
-      ## Can be either relative or absolute.
-      ## Default: ./downloads
-      DOWNLOADS_PATH: ./downloads
-
-      ## Temp Chunks Path
-      ## The path to temporarily store uploaded chunks until recombination, verification and movement to the selected folder in DOWNLOADS_PATH.
-      ## Can be either relative or absolute.
-      ## Default: ./temp_chunks
-      TEMP_CHUNKS_PATH: ./temp_chunks
 
       ## Max File Size
       ## The maximum file size allowed for each individual file, measured in gigabytes.
