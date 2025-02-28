@@ -3,7 +3,7 @@ name: Build and Push Docker Image to GitHub Container Registry
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your default branch
 
 jobs:
   build:
