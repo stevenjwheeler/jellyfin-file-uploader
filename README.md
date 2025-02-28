@@ -24,21 +24,39 @@ Requirements:
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
 #### Instructions
-- Run the following commands in a terminal:
+- Run the following commands in a terminal (change the variables in docker-compose.yml as necessary):
     ```bash
         git clone https://github.com/stevenjwheeler/jellyfin-file-uploader.git
         cd jellyfin-file-uploader
-        nano docker-compose.yml (then adjust as needed)
+        nano docker-compose.yml
         docker-compose up -d --build
     ```
 - Jellyfin File Uploader is now running on http://localhost:5005
 
-### Docker Container
+### Pre-built Docker Container
 Requirements:
 - [Docker](https://docs.docker.com/engine/install/)
 
 #### Instructions
-    Instructions coming soon
+- Run the following command in a terminal (change variables as necessary):
+    ```bash
+        docker run -d \
+          -p 5005:5005 \
+          -v /downloads:/app/downloads \
+          -e FLASK_APP=app.py \
+          -e FLASK_RUN_HOST=0.0.0.0 \
+          -e FLASK_SECRET_KEY=your_secret_key \
+          -e ALLOWED_EXTENSIONS=mp4,m4v,mov,mkv,avi,wmv,flv,webm,mp3,aac,flac,wav,ogg,m4a,mka,mks,jpg,jpeg,png,gif,bmp,tiff,webp \
+          -e LOGIN_ENABLED=true \
+          -e JELLYFIN_SERVER_ADDRESS=http://localhost:8096 \
+          -e DOWNLOADS_PATH=./downloads \
+          -e TEMP_CHUNKS_PATH=./temp_chunks \
+          -e MAX_FILE_SIZE=5 \
+          -e MAX_CONTENT_LENGTH=20 \
+          -e STALE_FILE_THRESHOLD=86400 \
+          ghcr.io/stevenjwheeler/jellyfin-file-uploader:latest
+    ```
+- Jellyfin File Uploader is now running on http://localhost:5005
 
 ### Direct
 Requirements:
